@@ -32,7 +32,9 @@ This project helps in understanding analog sensor interfacing, threshold detecti
 ## System Diagrams
 
 ### Block Diagram
-![Block Diagram](images/block_diagram.png)  
+
+<img width="499" height="525" alt="Screenshot 2026-04-23 152205" src="https://github.com/user-attachments/assets/b3b1fdd6-14c1-4396-b64b-546c1007e780" />
+
 *The microphone module detects sound and sends signals to the Arduino. Based on sound intensity, Arduino controls the motor driver to move the robot. LEDs and buzzer provide feedback.*
 
 ### Circuit Diagram
@@ -63,9 +65,3 @@ This project helps in understanding analog sensor interfacing, threshold detecti
 ## Conclusion
 The Sound Controlled Robot using Arduino Uno successfully demonstrates robotic movement triggered by sound input. The project enhanced skills in analog sensor processing, motor control, and real-time decision making. Despite environmental noise challenges, the robot responded reliably to sound commands, providing a fun and interactive robotics project.
 
----
-
-## Images
-*(Replace the placeholders with your actual images)*  
-![Sound Controlled Robot Front](images/sound_robot_front.png)  
-![Sound Controlled Robot Top](images/sound_robot_top.png)
