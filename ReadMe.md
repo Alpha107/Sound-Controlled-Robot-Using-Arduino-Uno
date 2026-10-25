@@ -1,67 +1,65 @@
-# Sound Controlled Robot Using Arduino Uno
+<h1 align="center">👏 Clap-Controlled Robot Car · Arduino Uno</h1>
 
-A remote-controlled robot that responds to sound commands such as claps or loud noises. This project demonstrates analog signal processing and motor control based on audio input.
+<p align="center">Count the claps, pick the move: 1 forward · 2 back · 3 left · 4 right.</p>
 
----
+<p align="center">
+  <img src="https://img.shields.io/badge/Arduino-Uno-teal" alt="Arduino Uno">
+  <img src="https://img.shields.io/badge/input-sound%20sensor-yellow" alt="Sound sensor">
+  <img src="https://img.shields.io/badge/status-needs%20fixes-orange" alt="Status">
+</p>
 
-## Introduction
-The Sound Controlled Robot is designed to move based on sound signals, such as clapping. A microphone module detects sound intensity and converts it into an electrical signal, which is processed by the Arduino Uno. Based on the detected sound pattern, the Arduino controls the motors to move the robot forward, stop, or change direction.
+## Overview
 
-This project helps in understanding analog sensor interfacing, threshold detection, and motor control. Sound-controlled robots are useful in assistive robotics, interactive applications, and basic automation systems.
+- A digital sound sensor counts claps inside a **2-second window**.
+- The count picks a move; the 4WD car runs it for 0.5–1.5 s, then stops.
 
----
+| Claps | Action | Duration |
+|:---:|---|:---:|
+| 1 | Forward | 1.5 s |
+| 2 | Backward | 1.5 s |
+| 3 | Turn left | 0.5 s |
+| 4 | Turn right | 0.5 s |
 
-## Components Used
+## How it works
 
-| Component | Description | Purpose |
-|-----------|------------|--------|
-| Microphone Module | Sound sensor | Detects sound input |
-| 4-Wheel Chassis | Mechanical base with wheels | Robot structure |
-| BO Motors (4) | DC geared motors | Vehicle movement |
-| Arduino Uno | ATmega328P microcontroller | Main controller |
-| Motor Driver | L298N Dual H-Bridge | Controls motor direction and speed |
-| Jumper Wires | Electrical connections | Circuit wiring |
-| Batteries | Li-ion / AA | Power supply |
-| Battery Holders | Secure battery placement | Power management |
-| LEDs | Indicator lights | Show robot status |
-| Resistors | Current limiting | Protect LEDs and circuits |
-| Buzzer | Audio alert | Feedback for sound input |
+```mermaid
+flowchart LR
+    M["Sound sensor<br/>D10"] -- "pulse" --> C["Count claps<br/>2 s window"]
+    C --> O["doOrders(count)"]
+    O --> D["Motor shield<br/>4 DC motors"]
+```
 
----
+## Hardware
 
-## System Diagrams
+| Part | Role |
+|---|---|
+| Arduino Uno | Controller |
+| Digital sound sensor (D10) | Clap input |
+| Adafruit Motor Shield v1 (`AFMotor`) | Drives 4 motors |
+| 4 × BO motors, 4WD chassis | Movement |
+| Battery pack | Power |
 
-### Block Diagram
+## Run it
 
-<img width="499" height="525" alt="Screenshot 2026-04-23 152205" src="https://github.com/user-attachments/assets/b3b1fdd6-14c1-4396-b64b-546c1007e780" />
+1. Install the **Adafruit Motor Shield library (v1, `AFMotor.h`)** in the Arduino IDE.
+2. Open `Arduino_ClapControlled__Car.ino`, select *Arduino Uno*, upload.
+3. Tune the sound sensor's potentiometer until one clap gives one pulse.
 
-*The microphone module detects sound and sends signals to the Arduino. Based on sound intensity, Arduino controls the motor driver to move the robot. LEDs and buzzer provide feedback.*
+## Status & known issues
 
-### Circuit Diagram
-![Circuit Diagram](images/circuit_diagram.png)  
-*Microphone module is connected to analog pins of Arduino. Motor driver receives PWM and direction signals from Arduino. LEDs and buzzer connected via resistors indicate status. Separate battery lines power the motors and controller.*
+| Issue | Effect | Fix |
+|---|---|---|
+| The sketch is wrapped in HTML `<strong>…</strong>` / `<br>` tags (copied from a web page) | **Won't compile** | Delete the tags at the start and end |
+| `Serial.begin()` is never called | Clap counts aren't printed | Add `Serial.begin(9600);` in `setup()` |
+| `doOrders(apl)` checks the global `cont` instead of `apl` | Works by accident; fragile | Use the parameter |
+| The code drives an Adafruit motor shield, but earlier docs said L298N | Wrong wiring if you follow the old docs | Use the shield, or rewrite the motor functions for L298N |
+| Motor noise and room sounds trigger the sensor | False claps | Debounce, raise the threshold, shield the sensor |
 
----
+**Credit:** the base sketch is by *DIY Burner* (credited in the file header).
 
-## Problems Faced
-- Microphone sensitivity caused false triggers  
-- Difficulty distinguishing between different sound patterns  
-- Environmental noise affecting performance  
-- Motor vibration interfering with sensor readings  
-- Power noise affecting analog signal stability  
+## Roadmap
 
----
-
-## Future Improvements
-- Implement sound pattern recognition for better control  
-- Add filtering to reduce noise interference  
-- Use multiple microphones for directional sound detection  
-- Integrate Wi-Fi or Bluetooth control as backup  
-- Replace L298N with a more efficient motor driver  
-- Use ESP32 for advanced sound processing  
-
----
-
-## Conclusion
-The Sound Controlled Robot using Arduino Uno successfully demonstrates robotic movement triggered by sound input. The project enhanced skills in analog sensor processing, motor control, and real-time decision making. Despite environmental noise challenges, the robot responded reliably to sound commands, providing a fun and interactive robotics project.
-
+- [ ] Clean the sketch so it compiles; add serial debug
+- [ ] Upload the circuit diagram and photos
+- [ ] Noise filtering and clap-pattern recognition
+- [ ] Bluetooth control as a fallback
